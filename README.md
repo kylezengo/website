@@ -1,38 +1,51 @@
 # kylezengo.com
 
-Source for [kylezengo.com](http://kylezengo.com) — a single-page static site.
+Source for [kylezengo.com](https://kylezengo.com) — a single-page static site.
 
 ## Contents
 
 - `index.html` — the entire site. No build step, no dependencies.
+- `CNAME` — tells GitHub Pages which custom domain to serve. Required; deleting
+  it drops the custom domain.
+- `.github/workflows/deploy.yml` — deploys the repo root to Pages on every push
+  to `main`.
 
-## Current hosting (AWS)
+## Deploying
 
-| Piece | Value |
-| --- | --- |
-| Origin bucket | `s3://kylezengo.com` (static website hosting, index document `index.html`) |
-| Redirect bucket | `s3://www.kylezengo.com` → redirects all requests to `kylezengo.com` |
-| DNS | Route 53 (`ns-852.awsdns-42.net` and siblings) |
-| CDN / TLS | **None.** Served directly from the S3 website endpoint over HTTP only. |
-| AWS account | `189815739999` |
+Push to `main`. The workflow uploads the repo root to GitHub Pages; there is no
+build step. You can also trigger it manually from the Actions tab
+(`workflow_dispatch`).
 
-The site is currently HTTP-only. S3 website endpoints do not support HTTPS, so
-adding TLS requires putting a CDN (CloudFront, or an equivalent on another host)
-in front of the bucket.
+## DNS
 
-> The CloudFront distribution `E26QOX2GXBJ5XW` in this account points at an
-> unrelated bucket and has no aliases — it does **not** serve this site.
+DNS stays in Route 53 (AWS account `189815739999`). For Pages, the apex record
+set for `kylezengo.com` should be four A records pointing at GitHub:
 
-## Deploying (current setup)
-
-```sh
-aws s3 sync . s3://kylezengo.com \
-  --exclude ".*" --exclude "README.md" --exclude ".git/*"
 ```
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+```
+
+and `www.kylezengo.com` should be a CNAME to `kylezengo.github.io`.
+
+## Migration status
+
+Previously served from `s3://kylezengo.com` as an S3 static website — HTTP only,
+since S3 website endpoints do not support TLS. GitHub Pages provides HTTPS via a
+free certificate once the DNS records above resolve.
+
+**Not yet decommissioned:** the `kylezengo.com` and `www.kylezengo.com` S3
+buckets still exist. Leave them until the new site is confirmed live, then delete
+them. The CloudFront distribution `E26QOX2GXBJ5XW` in that account points at an
+unrelated bucket and never served this site.
 
 ## Third-party embeds
 
-- Google Analytics, property `UA-140602518-1` — this is a Universal Analytics
-  tag. UA stopped processing data in 2023, so this tag is collecting nothing and
-  should be migrated to GA4 or removed.
 - Calendly badge widget → `calendly.com/zengokp/30min`
+
+The site previously carried a Google Analytics tag (`UA-140602518-1`). That was
+a Universal Analytics property, which stopped processing data in 2023, so it was
+collecting nothing; it has been removed. Add a GA4 tag if you want analytics
+back.
