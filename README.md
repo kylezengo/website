@@ -1,50 +1,24 @@
 # kylezengo.com
 
-Source for [kylezengo.com](https://kylezengo.com) — a single-page static site.
+Source for [kylezengo.com](https://kylezengo.com) — a single static page, no
+build step.
 
-## Contents
-
-- `index.html` — the entire site. No build step, no dependencies.
-- `CNAME` — tells GitHub Pages which custom domain to serve. Required; deleting
-  it drops the custom domain.
-- `.github/workflows/deploy.yml` — deploys the repo root to Pages on every push
-  to `main`.
+- `index.html` — the site
+- `CNAME` — the custom domain, read by Pages on each deploy. Deleting it reverts
+  the site to `kylezengo.github.io`.
+- `.github/workflows/deploy.yml` — publishes the repo root on push to `main`
 
 ## Deploying
 
-Push to `main`. The workflow uploads the repo root to GitHub Pages; there is no
-build step. You can also trigger it manually from the Actions tab
-(`workflow_dispatch`).
+Push to `main`, or run the workflow manually from the Actions tab.
 
 ## DNS
 
-DNS stays in Route 53. For Pages, the apex record set for `kylezengo.com` should
-be four A records pointing at GitHub:
+Hosted in Route 53; the domain is registered elsewhere. The apex points at
+GitHub's Pages IPs and `www` is a CNAME to `kylezengo.github.io` — see
+[GitHub's custom domain docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+for the current addresses.
 
-```
-185.199.108.153
-185.199.109.153
-185.199.110.153
-185.199.111.153
-```
+## Embeds
 
-and `www.kylezengo.com` should be a CNAME to `kylezengo.github.io`.
-
-## Migration status
-
-Previously served from `s3://kylezengo.com` as an S3 static website — HTTP only,
-since S3 website endpoints do not support TLS. GitHub Pages provides HTTPS via a
-free certificate once the DNS records above resolve.
-
-**Not yet decommissioned:** the `kylezengo.com` and `www.kylezengo.com` S3
-buckets still exist. Leave them until the new site is confirmed live, then delete
-them.
-
-## Third-party embeds
-
-- Calendly badge widget → `calendly.com/zengokp/30min`
-
-The site previously carried a Google Analytics tag (`UA-140602518-1`). That was
-a Universal Analytics property, which stopped processing data in 2023, so it was
-collecting nothing; it has been removed. Add a GA4 tag if you want analytics
-back.
+Calendly badge → `calendly.com/zengokp/30min`
