@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+
+# Local env / credentials — never commit
+.env
+.env.*
