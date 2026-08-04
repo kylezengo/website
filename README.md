@@ -18,8 +18,8 @@ build step. You can also trigger it manually from the Actions tab
 
 ## DNS
 
-DNS stays in Route 53 (AWS account `189815739999`). For Pages, the apex record
-set for `kylezengo.com` should be four A records pointing at GitHub:
+DNS stays in Route 53. For Pages, the apex record set for `kylezengo.com` should
+be four A records pointing at GitHub:
 
 ```
 185.199.108.153
@@ -38,8 +38,7 @@ free certificate once the DNS records above resolve.
 
 **Not yet decommissioned:** the `kylezengo.com` and `www.kylezengo.com` S3
 buckets still exist. Leave them until the new site is confirmed live, then delete
-them. The CloudFront distribution `E26QOX2GXBJ5XW` in that account points at an
-unrelated bucket and never served this site.
+them.
 
 ## Third-party embeds
 
